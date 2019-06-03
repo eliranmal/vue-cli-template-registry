@@ -13,10 +13,35 @@
 
 ## setup
 
-install via NPM:
-  
+choose your preferred setup method.
+
+
+#### none
+
+best for a one-time installation of an arbitrary custom-template. no residue on the file-system, no strings attached!
+
+```sh
+curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
+```
+
+
+#### via NPM
+
+this is the most convenient way to work with the registry if you have many custom-templates you'd like to install, or otherwise need to tinker with the installation command options.
+
 ```sh
 npm i -g vue-cli-template-registry
+```
+
+
+#### manual
+
+if you don't use NPM, you can just copy this script to your local `bin`.
+
+```sh
+curl -f -O https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh
+install -v -m 0755 ./registry.sh /usr/local/bin/vue-cli-template-registry
+rm -v ./registry.sh
 ```
 
 

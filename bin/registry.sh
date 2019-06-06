@@ -2,12 +2,57 @@
 
 
 usage() {
-	echo "
-usage: [environment] vue-cli-template-registry.sh [-hv] install|uninstall|update <source>
-environment:
-   REPO_REF=$REPO_REF
-   INSTALL_DIR=$INSTALL_DIR
-"
+	printf "%s" '
+usage
+-----
+
+  [env] vue-cli-template-registry [-h] [-v] install|uninstall|update <source>
+
+'
+}
+
+function info {
+    printf "%s%s" "$(usage)" '
+
+
+overview
+--------
+
+  a local registry for your vue-cli custom templates.
+  to be used with private/enterprise hosted custom-template repositories.
+
+
+environment
+-----------
+
+  INSTALL_DIR
+    a local path for the registry storage area.
+    defaults to "~/.vue-cli-templates".
+
+  REPO_REF
+    a github branch, tag, commitish etc., to pull from when cloning from a remote repository.
+    defaults to "master".
+
+
+flags
+-----
+
+  -v
+    switch on verbose logging.
+    off by default.
+
+
+arguments
+---------
+
+  source
+    the custom template source. can be either:
+      - a local directory path, pointing at a custom template project on your filesystem.
+      - a clone URL of the remote repository hosting that project.
+    this argument is mandatory.
+
+
+'
 }
 
 main() {
@@ -16,14 +61,20 @@ main() {
 
 	# break command-line apart to separate the flags from the operands
 	handle_options "$@"
-	# OPERANDS was set by the handler
+	# OPERANDS is now set by the handler, to hold the arguments list, filtered from flags
+
+	# handle env vars before other stuff, other methods may rely on them
+	handle_environment_variables
+
+	# require what the CLI states
+	if (( ${#OPERANDS[@]} < 2 )); then
+		quit
+	fi
 	set ${OPERANDS[@]}
 
+	# extract the command and discard it
 	command="$1"
 	shift
-
-	# handle env vars before other stuff: usage() relies on them, and quit() invokes usage()
-	handle_environment_variables
 
 	# validate command is part of the public CLI
 	if ! is_available "cmd_$command"; then
@@ -126,19 +177,18 @@ handle_options() {
 	TRACE_GIT='-q'
 
 	# parse command line and set globals
-	while getopts ":v:" opt; do
+	while getopts ":vh" opt; do
 		case "$opt" in
 			v)
 				TRACE_RM='-v'
 				TRACE_INST='-v'
 				TRACE_GIT=''
-				shift
 				;;
-			\?)
-				usage
-				exit
-				;;
+			h) info; exit ;;
+			\?) usage; exit ;;
 		esac
+		# always remove the flag, to send back a filtered list
+		shift
 	done
 
 	# use another global var to export the non-option parameters (the program's mass arguments).

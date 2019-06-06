@@ -3,57 +3,66 @@
 
 usage() {
 	echo "
-usage: [environment] vue-cli-template-registry.sh install|uninstall|update [-h] [-v]
+usage: [environment] vue-cli-template-registry.sh [-hv] install|uninstall|update <source>
 environment:
-   REPO_URL=$REPO_URL
    REPO_REF=$REPO_REF
-   LOCAL_PATH=$LOCAL_PATH
    INSTALL_DIR=$INSTALL_DIR
 "
 }
 
 main() {
-	local command="${1:-install}"
+	local args
+	local command
 
-	# handle environment variables first, usage() relies on them
-	ensure_repo_url
-	ensure_repo_ref
-	ensure_install_dir
-	handle_flags "$@"
+	# break command-line apart to separate the flags from the operands
+	handle_options "$@"
+	# OPERANDS was set by the handler
+	set ${OPERANDS[@]}
 
+	command="$1"
+	shift
+
+	# handle env vars before other stuff: usage() relies on them, and quit() invokes usage()
+	handle_environment_variables
+
+	# validate command is part of the public CLI
 	if ! is_available "cmd_$command"; then
 		quit
 	fi
 
-	register_cache
-	set_traps "$TEMP_DIR"
+	# sets cleanup handlers on exit, and wraps the prompt with greeting messages
+	set_traps
 
-	shift
-	cmd_${command}
+	# invoke the main command
+	cmd_${command} "$@"
 }
 
 cmd_install() {
-	local rel_dir
-	local rel_file
+	local source="$1"
+	local output
 	local clone_dir
 	local custom_template_name
-	local template_app_dir_pattern
 	local custom_template_source_path
 	local custom_template_target_path
 
-	custom_template_name="$(resolve_custom_template_name)"
+	require_args "$source"
+
+	custom_template_name="$(resolve_custom_template_name "$source")"
 	custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
 
-
-	if [[ -d "$LOCAL_PATH" ]]; then
+	# if it's a local path, use it. otherwise, treat it like a remote git url
+	if [[ -d "$source" ]]; then
 		log "resolving custom template local path..."
-		custom_template_source_path="$LOCAL_PATH"
+		custom_template_source_path="$source"
 		log_ok "resolved ok"
 	else
-		clone_dir="$TEMP_DIR/$custom_template_name" # we know TEMP_DIR is available in this case
+		# only initialize the cache when it's needed
+		init_cache
+		clone_dir="$CACHE_DIR/$custom_template_name"
 		log "cloning custom template from github ($REPO_REF)..."
-		light_clone "$REPO_URL" "$clone_dir" "$REPO_REF"
-		status_log "cloned ok" "clone failed"
+		output=("$(light_clone "$source" "$clone_dir" "$REPO_REF" 2>&1)")
+		status_log "cloned ok" "clone failed:
+      ${output}"
 		custom_template_source_path="$clone_dir"
 	fi
 
@@ -83,43 +92,78 @@ cmd_install() {
 }
 
 cmd_uninstall() {
+	local source="$1"
 	local custom_template_name
+	local custom_template_target_path
 
-	custom_template_name="$(resolve_custom_template_name)"
+	require_args "$source"
 
-	log "removing custom template '$custom_template_name' from registry..."
-	remove_dir "$INSTALL_DIR/$custom_template_name"
-	status_log "removed ok" "remove failed"
+	custom_template_name="$(resolve_custom_template_name "$source")"
+    custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
+
+
+	log "removing '$custom_template_name' from the registry..."
+	if [[ -d "$custom_template_target_path" ]]; then
+		remove_dir "$custom_template_target_path"
+		status_log "removed ok" "remove failed"
+	else
+		log_info "remove skipped (item not found)"
+	fi
 }
 
 cmd_update() {
-	cmd_uninstall
-	cmd_install
+	cmd_uninstall "$@"
+	cmd_install "$@"
 }
 
-handle_flags() {
-	if [[ "$@" =~ '-h' ]]; then
-		quit
-	fi
-	if [[ "$@" =~ '-v' ]]; then
-		TRACE_RM='-v'
-		TRACE_INST='-v'
-	else
-		TRACE_GIT='-q'
-	fi
+handle_options() {
+	local OPTIND
+	local opt
+
+	# reset to default state
+	TRACE_RM=''
+	TRACE_INST=''
+	TRACE_GIT='-q'
+
+	# parse command line and set globals
+	while getopts ":v:" opt; do
+		case "$opt" in
+			v)
+				TRACE_RM='-v'
+				TRACE_INST='-v'
+				TRACE_GIT=''
+				shift
+				;;
+			\?)
+				usage
+				exit
+				;;
+		esac
+	done
+
+	# use another global var to export the non-option parameters (the program's mass arguments).
+	# don't just echo them back, to not force the function user to use a subshell
+	# (which will sabotage setting global variables in the parent shell)
+    OPERANDS=${@}
 }
 
-# creates a cache area (temp dir) if necessary
-register_cache() {
-	if [[ ! -d "$LOCAL_PATH" ]]; then
-		TEMP_DIR="$(create_temp_dir)"
-	fi
+handle_environment_variables() {
+	ensure_repo_ref
+	ensure_install_dir
 }
 
 set_traps() {
 	log_header 'hi :)'
-	trap 'remove_dir '"$@"' ; log_header "bye ♥
-"' EXIT
+	trap 'log_header "bye ♥
+" ; clear_cache' EXIT
+}
+
+init_cache() {
+	CACHE_DIR="$(create_temp_dir)"
+}
+
+clear_cache() {
+	remove_dir ${CACHE_DIR}
 }
 
 light_clone() {
@@ -184,10 +228,11 @@ install_file_tree() {
 }
 
 resolve_custom_template_name() {
-	if [[ -d "$LOCAL_PATH" ]]; then
-		basename "$LOCAL_PATH"
-	else
-		filename "$REPO_URL"
+	local source="$1"
+	if [[ -d "$source" ]]; then
+		basename "$source"
+	elif [[ -n "$source" ]]; then
+		filename "$source"
 	fi
 }
 
@@ -195,19 +240,6 @@ resolve_custom_template_name() {
 filename() {
 	basename "${1%.*}"
 }
-
-# todo - require REPO_URL env-var to be mutually exclusive with the LOCAL_PATH env-var.
-# todo - i could even make them both into a single one, and test if it's a local directory to know if i should tread it like a url or not. e.g. SOURCE_URI
-# todo - make this a validator and not an ensurer when passing repo url from outside.
-ensure_repo_url() {
-	REPO_URL="${REPO_URL:-***REMOVED***}"
-}
-
-#require_source_uri() {
-#	if [[ -z "$REPO_URL" && -z "$LOCAL_PATH" ]]; then
-#	fi
-#	REPO_URL="${REPO_URL:-***REMOVED***}"
-#}
 
 ensure_repo_ref() {
 	REPO_REF="${REPO_REF:-master}"
@@ -227,6 +259,25 @@ is_available() {
 	type "$1" >/dev/null 2>&1
 }
 
+has_param() {
+	local term="$1"
+	shift
+	for arg; do
+		if [[ $arg == "$term" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+require_args() {
+	for arg; do
+		if [[ -z $arg ]]; then
+			quit
+		fi
+	done
+}
+
 log() {
 	printf "\n  %s\n" "$1"
 }
@@ -237,6 +288,10 @@ log_header() {
 
 log_ok() {
 	printf "    ✔ %s\n" "$1"
+}
+
+log_info() {
+	printf "    ℹ %s\n" "$1"
 }
 
 log_error() {

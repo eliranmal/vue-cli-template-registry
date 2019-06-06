@@ -8,26 +8,30 @@
 
 ## overview
 
-&hellip;
+a local registry for your vue-cli custom templates.  
+to be used with private/enterprise hosted custom template repositories.
 
 
 ## setup
 
-choose your preferred setup method.
+choose your preferred setup method:
 
 
-#### none
+#### none!
 
-best for a one-time installation of an arbitrary custom-template. no residue on the file-system, no strings attached!
+best for a one-time installation of an arbitrary custom template. no residue on the file-system, no strings attached!
+make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).
 
 ```sh
 curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
 ```
 
+building your own custom template? add this one-liner to the custom template readme page.
+
 
 #### via NPM
 
-this is the most convenient way to work with the registry if you have many custom-templates you'd like to install, or otherwise need to tinker with the installation command options.
+this is the most convenient way to work with the registry if you have many custom templates you'd like to install, or otherwise need to tinker with the installation command options.
 
 ```sh
 npm i -g vue-cli-template-registry
@@ -36,7 +40,7 @@ npm i -g vue-cli-template-registry
 
 #### manual
 
-if you don't use NPM, you can just copy this script to your local `bin`.
+if you don't use NPM, or you're just into typing stuff, you can manually copy the registry script to your local `bin` directory.
 
 ```sh
 curl -f -O https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh
@@ -47,30 +51,13 @@ rm -v ./registry.sh
 
 ## usage
 
-from the terminal, run the registry script:
+if you installed the registry locally, you will find its command available in the terminal.
+regardless, the CLI options are the same.
 
-```sh
-vue-cli-template-registry
-```
+the first argument can be either `install`, `uninstall` or `update`, and the second is used for passing in
+the custom template source, either in the form of a github clone URL, or a local path pointing at your custom template. 
 
-&hellip;
-
-```sh
-vue-cli-template-registry 'arg' 'option'
-```
-
-&hellip;
-
-&hellip; the `WAT` environment variable:
-
-```sh
-env WAT='serve' vue-cli-template-registry
-```
-
-
-## CLI
-
-use the `-h` flag to see the manual.
+use the `-h` flag for more details.
 
 
 

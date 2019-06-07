@@ -58,6 +58,10 @@ arguments
 main() {
 	local args
 	local command
+	local source
+	local custom_template_name
+	local custom_template_source_path
+	local custom_template_target_path
 
 	# handle env vars before other stuff, other methods may rely on them
 	handle_environment_variables
@@ -76,47 +80,41 @@ main() {
 	command="$1"
 	shift
 
-	# validate command is part of the public CLI
+	# validate command's value is part of the public CLI
 	if ! is_available "cmd_$command"; then
 		quit
+	fi
+
+	# validate source has a legal value
+	source="$1"
+	if [[ -z "$source" ]] || ! is_local "$source" && ! is_remote "$source"; then
+		quit "$(info)"
 	fi
 
 	# sets cleanup handlers on exit, and wraps the prompt with greeting messages
 	set_traps
 
+	custom_template_name="$(resolve_custom_template_name "$source")"
+    custom_template_source_path="$(resolve_custom_template_source_path "$source" "$custom_template_name")"
+    custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
+
 	# invoke the main command
-	cmd_${command} "$@"
+	cmd_${command} "$source" "$custom_template_name" "$custom_template_target_path" "$custom_template_source_path"
 }
 
 cmd_install() {
 	local source="$1"
+	local custom_template_name="$2"
+	local custom_template_target_path="$3"
+	local custom_template_source_path="$4"
 	local output
-	local clone_dir
-	local custom_template_name
-	local custom_template_source_path
-	local custom_template_target_path
 
-	require_args "$source"
-
-	custom_template_name="$(resolve_custom_template_name "$source")"
-	custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
-
-	# if it's a local path, use it. otherwise, treat it like a remote git url
-	if [[ -d "$source" ]]; then
-		log "resolving custom template local path..."
-		custom_template_source_path="$source"
-		log_ok "resolved ok"
-	else
-		# only initialize the cache when it's needed
-		init_cache
-		clone_dir="$CACHE_DIR/$custom_template_name"
+	if is_remote "$source"; then
 		log "cloning custom template from github ($REPO_REF)..."
-		output=("$(light_clone "$source" "$clone_dir" "$REPO_REF" 2>&1)")
+		output="$(light_clone "$source" "$custom_template_source_path" "$REPO_REF" 2>&1)"
 		status_log "cloned ok" "clone failed:
       ${output}"
-		custom_template_source_path="$clone_dir"
 	fi
-
 
 	log "installing global registry directory..."
 	install_dir "$INSTALL_DIR"
@@ -144,14 +142,8 @@ cmd_install() {
 
 cmd_uninstall() {
 	local source="$1"
-	local custom_template_name
-	local custom_template_target_path
-
-	require_args "$source"
-
-	custom_template_name="$(resolve_custom_template_name "$source")"
-    custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
-
+	local custom_template_name="$2"
+	local custom_template_target_path="$3"
 
 	log "removing '$custom_template_name' from the registry..."
 	if [[ -d "$custom_template_target_path" ]]; then
@@ -279,10 +271,23 @@ install_file_tree() {
 
 resolve_custom_template_name() {
 	local source="$1"
-	if [[ -d "$source" ]]; then
+	if is_local "$source"; then
 		basename "$source"
-	elif [[ -n "$source" ]]; then
+	elif is_remote "$source"; then
 		filename "$source"
+	fi
+}
+
+resolve_custom_template_source_path() {
+	local source="$1"
+	local custom_template_name="$2"
+	if is_local "$source"; then
+		printf "%s" "$source"
+	elif is_remote "$source"; then
+		# only initialize the cache when it's needed
+		init_cache
+		# prepare an area for cloning the remote
+		printf "%s" "$CACHE_DIR/$custom_template_name"
 	fi
 }
 
@@ -309,6 +314,17 @@ is_available() {
 	type "$1" >/dev/null 2>&1
 }
 
+is_local() {
+	local source="$1"
+	[[ -d $source ]]
+}
+
+is_remote() {
+	local source="$1"
+	local pattern='^http.+\.git$'
+	[[ $source =~ $pattern ]]
+}
+
 has_param() {
 	local term="$1"
 	shift
@@ -318,14 +334,6 @@ has_param() {
 		fi
 	done
 	return 1
-}
-
-require_args() {
-	for arg; do
-		if [[ -z $arg ]]; then
-			quit
-		fi
-	done
 }
 
 log() {
@@ -364,7 +372,8 @@ quit() {
 	local status=$?
 	local msg="$1"
 	if [[ -n "$msg" ]]; then
-		log "$msg"
+		log "$msg
+"
 	else
 		usage
 	fi

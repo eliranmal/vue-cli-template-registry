@@ -59,12 +59,12 @@ main() {
 	local args
 	local command
 
+	# handle env vars before other stuff, other methods may rely on them
+	handle_environment_variables
+
 	# break command-line apart to separate the flags from the operands
 	handle_options "$@"
 	# OPERANDS is now set by the handler, to hold the arguments list, filtered from flags
-
-	# handle env vars before other stuff, other methods may rely on them
-	handle_environment_variables
 
 	# require what the CLI states
 	if (( ${#OPERANDS[@]} < 2 )); then
@@ -191,10 +191,10 @@ handle_options() {
 		shift
 	done
 
-	# use another global var to export the non-option parameters (the program's mass arguments).
-	# don't just echo them back, to not force the function user to use a subshell
-	# (which will sabotage setting global variables in the parent shell)
-    OPERANDS=${@}
+	# use another global var to export the non-option parameters (the program's mass arguments) as a list.
+	# don't just echo them back, to not force the function user to use a subshell (which blocks setting
+	# global variables in the parent shell).
+    OPERANDS=( ${@} )
 }
 
 handle_environment_variables() {

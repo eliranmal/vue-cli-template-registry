@@ -71,9 +71,7 @@ main() {
 	# OPERANDS is now set by the handler, to hold the arguments list, filtered from flags
 
 	# require what the CLI states
-	if (( ${#OPERANDS[@]} < 2 )); then
-		quit
-	fi
+	require_args 2 ${OPERANDS[@]}
 	set ${OPERANDS[@]}
 
 	# extract the command and discard it
@@ -334,6 +332,14 @@ has_param() {
 		fi
 	done
 	return 1
+}
+
+require_args() {
+	local min_size=${1}
+	shift
+	if (( $# < ${min_size} )); then
+		quit
+	fi
 }
 
 log() {

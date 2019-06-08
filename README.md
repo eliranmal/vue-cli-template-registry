@@ -7,8 +7,7 @@
 
 ## overview
 
-a local registry for your vue-cli custom templates.  
-to be used with private/enterprise hosted custom template repositories.
+a local registry for your vue-cli custom templates. to be used with private/enterprise hosted custom template repositories.
 
 
 ## setup

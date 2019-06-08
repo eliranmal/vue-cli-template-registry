@@ -26,7 +26,7 @@ make sure to replace `<awesome-cli-template>` with your custom template clone UR
 curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
 ```
 
-building your own custom template? add this one-liner to the custom template readme page.
+* :: **tip:** building your own custom template? add this one-liner to the readme page.*
 
 
 #### via NPM

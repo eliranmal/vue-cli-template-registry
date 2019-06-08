@@ -22,6 +22,31 @@ overview
   to be used with private/enterprise hosted custom-template repositories.
 
 
+flags
+-----
+
+  -h
+    shows this help page, and quits.
+
+  -v
+    switches on verbose logging.
+    off by default.
+
+
+operands
+--------
+
+  command
+    the registry command type. can be one of `install`, `uninstall` or `update`.
+    this argument is mandatory.
+
+  source
+    the custom template source. can be either:
+      - a local directory path, pointing at a custom template project on your filesystem.
+      - a clone URL of the remote repository hosting that project.
+    this argument is mandatory.
+
+
 environment
 -----------
 
@@ -32,24 +57,6 @@ environment
   REPO_REF
     a github branch, tag, commitish etc., to pull from when cloning from a remote repository.
     defaults to "master".
-
-
-flags
------
-
-  -v
-    switch on verbose logging.
-    off by default.
-
-
-arguments
----------
-
-  source
-    the custom template source. can be either:
-      - a local directory path, pointing at a custom template project on your filesystem.
-      - a clone URL of the remote repository hosting that project.
-    this argument is mandatory.
 
 
 '

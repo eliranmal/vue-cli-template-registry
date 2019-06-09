@@ -48,24 +48,24 @@ rm -v ./registry.sh
 
 ## usage
 
-if you chose to skip the setup, you can alternatively fetch and run this script with a single command line. no residue on the file-system, no strings attached!
+if you chose to skip the setup, you can use a single command line to fetch and run the registry:
 
 ```sh
 curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
 ```
 
-make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).
+<sup>make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
 
 :ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*
  
 
-if you installed the registry locally, you will find the `vue-cli-template-registry` command available in the terminal.
+if you did follow the setup, you will find the `vue-cli-template-registry` command available in the terminal.
 in any case, the command-line interface arguments and flags are the same.
 
 the first argument can be either `install`, `uninstall` or `update`, and the second is used for passing in
 the custom template source, either in the form of a github clone URL, or a local path pointing at your custom template project.
 
-use the `-h` flag for more details.
+for more details use the `-h` flag.
 
 
 

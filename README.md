@@ -8,7 +8,11 @@
 
 ## overview
 
-a local registry for your vue-cli custom templates. to be used with private/enterprise hosted custom template repositories.
+this is a command-line tool that provides an easy way to use [vue-cli custom templates][5] hosted on private/enterprise repositories; it saves them locally, so we can install from a local path:
+
+```sh
+vue init ~/.vue-cli-templates/my-awesome-template my-app
+```
 
 
 ## setup
@@ -71,3 +75,4 @@ use the `-h` flag for more details.
 [2]: https://www.npmjs.com/package/vue-cli-template-registry
 [3]: https://github.com/vuejs/vue-cli/tree/master#custom-templates
 [4]: #usage
+[5]: https://github.com/vuejs/vue-cli/tree/master#custom-templates

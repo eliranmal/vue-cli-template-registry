@@ -17,7 +17,7 @@ vue init ~/.vue-cli-templates/my-awesome-template my-app
 
 ## setup
 
-choose your preferred setup method:
+choose your preferred method:
 
 
 #### none!

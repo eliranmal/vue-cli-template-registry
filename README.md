@@ -37,7 +37,7 @@ npm i -g vue-cli-template-registry
 
 #### manual
 
-if you don't use NPM, or you're just into typing stuff, you can manually copy the registry script to your local `bin` directory.
+if you don't use NPM, or you're just into typing stuff, you can manually copy the registry script to your local `bin` directory:
 
 ```sh
 curl -f -O https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh

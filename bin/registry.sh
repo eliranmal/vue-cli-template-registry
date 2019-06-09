@@ -6,7 +6,7 @@ usage() {
 usage
 -----
 
-  [env] vue-cli-template-registry [-h] [-v] install|uninstall|update <source>
+  [env] vue-cli-template-registry [-h] [-v] install|uninstall|update <clone-url|local-path>
 
 '
 }
@@ -41,9 +41,9 @@ operands
     this argument is mandatory.
 
   source
-    the custom template source. can be either:
-      - a local directory path, pointing at a custom template project on your filesystem.
+    a source for the custom template project. can be either:
       - a clone URL of the remote repository hosting that project.
+      - a local directory path, pointing at a custom template project on your filesystem.
     this argument is mandatory.
 
 

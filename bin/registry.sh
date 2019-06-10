@@ -54,7 +54,7 @@ environment
     a local path for the registry storage area.
     defaults to "~/.vue-cli-templates".
 
-  REPO_REF
+  CLONE_REF
     a github branch, tag, commitish etc., to pull from when cloning from a remote repository.
     defaults to "master".
 
@@ -115,8 +115,8 @@ cmd_install() {
 	local output
 
 	if is_remote "$source"; then
-		log "cloning custom template from github ($REPO_REF)..."
-		output="$(light_clone "$source" "$custom_template_source_path" "$REPO_REF" 2>&1)"
+		log "cloning custom template from github ($CLONE_REF)..."
+		output="$(light_clone "$source" "$custom_template_source_path" "$CLONE_REF" 2>&1)"
 		status_log "cloned ok" "clone failed:
       ${output}"
 	fi
@@ -195,7 +195,7 @@ handle_options() {
 }
 
 handle_environment_variables() {
-	ensure_repo_ref
+	ensure_clone_ref
 	ensure_install_dir
 }
 
@@ -301,8 +301,8 @@ filename() {
 	basename "${1%.*}"
 }
 
-ensure_repo_ref() {
-	REPO_REF="${REPO_REF:-master}"
+ensure_clone_ref() {
+	CLONE_REF="${CLONE_REF:-master}"
 }
 
 ensure_install_dir() {

@@ -55,7 +55,7 @@ environment
     defaults to "~/.vue-cli-templates".
 
   CLONE_REF
-    a github branch, tag, commitish etc., to pull from when cloning from a remote repository.
+    a github branch, tag, committish etc., to pull from when cloning from a remote repository.
     defaults to "master".
 
 

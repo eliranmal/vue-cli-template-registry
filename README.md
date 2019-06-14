@@ -59,11 +59,16 @@ curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/m
 :ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*
  
 
-if you did follow the setup, you will find the `vue-cli-template-registry` command available in the terminal.
-in any case, the command-line interface arguments and flags are the same.
+if you followed the setup, you will find the `vue-cli-template-registry` command available in the terminal.
 
-the first argument can be either `install`, `uninstall` or `update`, and the second is used for passing in
-the custom template source, either in the form of a github clone URL, or a local path pointing at your custom template project.
+it can be run with the same arguments:
+
+```sh
+vue-cli-template-registry install https://org.github.net/user/awesome-custom-template.git
+```
+
+the first argument is the registry command, and can be either `install`, `uninstall` or `update`.  
+the second is for passing the custom template source, either in the form of a github clone URL, or a local path.
 
 for more details use the `-h` flag.
 

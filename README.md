@@ -63,7 +63,7 @@ if you followed the setup, you will find the `vue-cli-template-registry` command
 it can be run with the same arguments:
 
 ```sh
-vue-cli-template-registry install https://org.github.net/user/awesome-custom-template.git
+vue-cli-template-registry install https://my-org.github.net/my-user/my-custom-template.git
 ```
 
 the first argument is the registry command, and can be either `install`, `uninstall` or `update`.  

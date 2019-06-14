@@ -70,7 +70,7 @@ for more details use the `-h` flag.
 
 ---
 
-**\*** <sup>make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
+<sup>**\*** make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
 
 
 

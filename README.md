@@ -42,7 +42,7 @@ npm i -g vue-cli-template-registry
 if you don't use NPM, or you're just into typing stuff, you can manually copy the registry script to your local `bin` directory:
 
 ```sh
-curl -f -O https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh
+curl -L -f -O https://raw.github.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh
 install -v -m 0755 ./registry.sh /usr/local/bin/vue-cli-template-registry
 rm -v ./registry.sh
 ```
@@ -53,7 +53,7 @@ rm -v ./registry.sh
 if you chose to skip the setup, you can use a single command line to fetch and run the registry <sup>\[[2][101]]</sup>:
 
 ```sh
-curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
+curl -Lsf https://raw.github.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
 ```
   
 :ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*

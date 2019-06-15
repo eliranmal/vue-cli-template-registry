@@ -8,7 +8,7 @@
 
 ## overview
 
-this is a command-line tool that enables the usage of [vue-cli custom templates][3] hosted on private/enterprise repositories <sup>\[[1][100]]</sup>.
+this is a command-line tool that enables the usage of [vue-cli custom templates][3] hosted on private/enterprise repositories <sup>\[[1][101]]</sup>.
 
 it stores the templates locally, so we can install them from a local path. for example:
 

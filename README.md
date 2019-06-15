@@ -8,8 +8,9 @@
 
 ## overview
 
-this is a command-line tool that provides an easy way to use [vue-cli custom templates][5] hosted on private/enterprise repositories;
-it saves them locally so we can install from a local path, for example:
+this is a command-line tool that enables the usage of [vue-cli custom templates][3] hosted on private/enterprise repositories <sup>\[[1][100]]</sup>.
+
+it stores the templates locally, so we can install them from a local path. for example:
 
 ```sh
 vue init ~/.vue-cli-templates/my-awesome-template my-app
@@ -24,7 +25,7 @@ choose your preferred method:
 #### none!
 
 for a one-time installation of an arbitrary custom template, no setup is required.
-skip ahead to the [usage][4] section for more details.
+skip ahead to the [usage][100] section for more details.
 
 
 #### via NPM
@@ -49,7 +50,7 @@ rm -v ./registry.sh
 
 ## usage
 
-if you chose to skip the setup, you can use a single command line to fetch and run the registry **\***:
+if you chose to skip the setup, you can use a single command line to fetch and run the registry <sup>\[[2][101]]</sup>:
 
 ```sh
 curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
@@ -58,7 +59,7 @@ curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/m
 :ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*
 
 if you followed the setup, you will find the `vue-cli-template-registry` command available in the terminal.  
-it can be run with the same arguments <sup>\[[1][100]]</sup>:
+it can be run with the same arguments <sup>\[[2][101]]</sup>:
 
 ```sh
 vue-cli-template-registry install <awesome-cli-template>
@@ -69,14 +70,18 @@ the second is for passing the custom template source, either in the form of a gi
 
 for more details use the `-h` flag.
 
----
 
-###### <sup>\[1] make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
+## notes
+
+1. *at the time of writing, vue-cli 2.x does not play nice with such repositories (see [this issue on the vue-cli repository][4]). if/when this issue is resolved, vue-cli-template-registry will become obsolete.*
+2. *make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).*
 
 
 
 [1]: https://img.shields.io/npm/v/vue-cli-template-registry.svg?style=flat-square
 [2]: https://www.npmjs.com/package/vue-cli-template-registry
 [3]: https://github.com/vuejs/vue-cli/tree/master#custom-templates
-[4]: #usage
-[5]: https://github.com/vuejs/vue-cli/tree/master#custom-templates
+[4]: https://github.com/vuejs/vue-cli/issues/3384
+
+[100]: #usage
+[101]: #notes

@@ -58,7 +58,7 @@ curl -sf https://raw.githubusercontent.com/eliranmal/vue-cli-template-registry/m
 :ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*
 
 if you followed the setup, you will find the `vue-cli-template-registry` command available in the terminal.  
-it can be run with the same arguments **\***:
+it can be run with the same arguments <sup>\[[1][100]]</sup>:
 
 ```sh
 vue-cli-template-registry install <awesome-cli-template>
@@ -71,7 +71,7 @@ for more details use the `-h` flag.
 
 ---
 
-<sup>**\*** make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
+###### <sup>\[1] make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).</sup>
 
 
 

@@ -8,7 +8,8 @@
 
 ## overview
 
-this is a command-line tool that provides an easy way to use [vue-cli custom templates][5] hosted on private/enterprise repositories; it saves them locally, so we can install from a local path:
+this is a command-line tool that provides an easy way to use [vue-cli custom templates][5] hosted on private/enterprise repositories;
+it saves them locally so we can install from a local path, for example:
 
 ```sh
 vue init ~/.vue-cli-templates/my-awesome-template my-app

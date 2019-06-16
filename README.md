@@ -1,7 +1,7 @@
 
 # vue-cli-template-registry
 
-*a solution for vue-cli custom templates hosted on private/enterprise repositories*
+*a solution for installing vue-cli custom templates hosted on private/enterprise repositories*
 
 [![NPM][1]][2]
 

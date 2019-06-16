@@ -56,7 +56,7 @@ if you chose to skip the setup, you can use a single command line to fetch and r
 curl -Lsf https://raw.github.com/eliranmal/vue-cli-template-registry/master/bin/registry.sh | bash -s install <awesome-cli-template>
 ```
   
-:ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*
+<sup>:ok_hand: ***tip:** building your own custom template? add this one-liner to the readme page.*</sup>
 
 if you followed the setup, you will find the `vue-cli-template-registry` command available in the terminal.  
 it can be run with the same arguments <sup>\[[2][101]]</sup>:

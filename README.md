@@ -73,7 +73,7 @@ for more details use the `-h` flag.
 
 ## notes
 
-1. *at the time of writing, vue-cli 2.x does not play nice with such repositories (see [this issue on the vue-cli repository][4]). if/when this issue is resolved, vue-cli-template-registry will become obsolete.*
+1. *at the time of writing, vue-cli does not work for such repositories (see [this issue][4]). if/when this issue is resolved, vue-cli-template-registry will become obsolete.*
 2. *make sure to replace `<awesome-cli-template>` with your custom template clone URL (or local path).*
 
 

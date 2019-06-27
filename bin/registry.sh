@@ -125,20 +125,12 @@ cmd_install() {
 	install_dir "$INSTALL_DIR"
 	status_log "installed ok" "installation failed"
 
-	log "installing base directory..."
-	install_dir "$custom_template_target_path"
+	log "installing directory tree..."
+	install_dir_tree "$custom_template_source_path" "$custom_template_target_path" '\/*'
 	status_log "installed ok" "installation failed"
 
-	log "installing template directory tree..."
-	install_dir_tree "$custom_template_source_path" "$custom_template_target_path" '\/template*'
-	status_log "installed ok" "installation failed"
-
-	log "installing meta file..."
-	install_file ${custom_template_source_path}/meta.* ${custom_template_target_path}
-	status_log "installed ok" "installation failed"
-
-	log "installing template file tree..."
-	install_file_tree "$custom_template_source_path" "$custom_template_target_path" '\/template*'
+	log "installing file tree..."
+	install_file_tree "$custom_template_source_path" "$custom_template_target_path" '\/*'
 	status_log "installed ok" "installation failed"
 
 	log_header 'setup done!'

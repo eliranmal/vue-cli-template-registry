@@ -125,11 +125,11 @@ cmd_install() {
 	install_dir "$INSTALL_DIR"
 	status_log "installed ok" "installation failed"
 
-	log "installing directory tree..."
+	log "installing custom template directories..."
 	install_dir_tree "$custom_template_source_path" "$custom_template_target_path" '\/*'
 	status_log "installed ok" "installation failed"
 
-	log "installing file tree..."
+	log "installing custom template files..."
 	install_file_tree "$custom_template_source_path" "$custom_template_target_path" '\/*'
 	status_log "installed ok" "installation failed"
 

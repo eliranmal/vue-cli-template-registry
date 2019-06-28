@@ -50,7 +50,7 @@ operands
 environment
 -----------
 
-  INSTALL_DIR
+  REGISTRY_HOME
     a local path for the registry storage area.
     defaults to "~/.vue-cli-templates".
 
@@ -101,7 +101,7 @@ main() {
 
 	custom_template_name="$(resolve_custom_template_name "$source")"
     custom_template_source_path="$(resolve_custom_template_source_path "$source" "$custom_template_name")"
-    custom_template_target_path=${INSTALL_DIR}/${custom_template_name}
+    custom_template_target_path=${REGISTRY_HOME}/${custom_template_name}
 
 	# invoke the main command
 	cmd_${command} "$source" "$custom_template_name" "$custom_template_target_path" "$custom_template_source_path"
@@ -121,8 +121,8 @@ cmd_install() {
       ${output}"
 	fi
 
-	log "installing global registry directory..."
-	install_dir "$INSTALL_DIR"
+	log "installing registry home directory..."
+	install_dir "$REGISTRY_HOME"
 	status_log "installed ok" "installation failed"
 
 	log "installing custom template directories..."
@@ -188,7 +188,7 @@ handle_options() {
 
 handle_environment_variables() {
 	ensure_clone_ref
-	ensure_install_dir
+	ensure_registry_home
 }
 
 set_traps() {
@@ -297,9 +297,9 @@ ensure_clone_ref() {
 	CLONE_REF="${CLONE_REF:-master}"
 }
 
-ensure_install_dir() {
-	if [[ -z $INSTALL_DIR || ! -d $INSTALL_DIR ]]; then
-		INSTALL_DIR=~/.vue-cli-templates
+ensure_registry_home() {
+	if [[ -z $REGISTRY_HOME || ! -d $REGISTRY_HOME ]]; then
+		REGISTRY_HOME=~/.vue-cli-templates
 	fi
 }
 

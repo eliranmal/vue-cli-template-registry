@@ -3,7 +3,7 @@
 
 *a solution for installing vue-cli custom templates hosted on private/enterprise repositories*
 
-[![NPM][1]][2]
+[![NPM][1]][2] [![mentioned in awesome-vue][6]][7]
 
 
 ## overview
@@ -82,6 +82,8 @@ for more details use the `-h` flag.
 [2]: https://www.npmjs.com/package/vue-cli-template-registry
 [3]: https://github.com/vuejs/vue-cli/tree/master#custom-templates
 [4]: https://github.com/vuejs/vue-cli/issues/3384
+[6]: https://awesome.re/mentioned-badge-flat.svg
+[7]: https://github.com/vuejs/awesome-vue
 
 [100]: #usage
 [101]: #notes
